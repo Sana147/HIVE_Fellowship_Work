@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Educational PoC: Simulating Heap Buffer Overflow Concept</title>
+</head>
+<body>
+  <h1>Educational PoC: Demonstrating Trusted Copy vs Untrusted Heap Buffer Overflow</h1>
+
+  <p>
+    This PoC <strong>does NOT</strong> exploit the actual CVE-2020-16010 vulnerability in Chrome. 
+    Instead, it conceptually simulates what happens in a heap buffer overflow vulnerability:
+  </p>
+  <ul>
+    <li>Trusted copy obeys the buffer size limits.</li>
+    <li>Untrusted copy writes beyond the buffer size, simulating heap buffer overflow.</li>
+  </ul>
+  <p>
+    Note: JavaScript arrays are dynamically sized, so this example does not cause real memory corruption like in C/C++.
+  </p>
+
+  <script>
+    // Trusted copy function that obeys buffer size
+    function trustedCopy(source, size) {
+      let buffer = new Array(size).fill(0);
+      console.log("Initial trusted buffer:", buffer);
+
+      // Copy only up to buffer size or source length, whichever is smaller
+      for (let i = 0; i < Math.min(size, source.length); i++) {
+        buffer[i] = source[i];
+      }
+
+      console.log("Buffer after trusted copy:", buffer);
+      return buffer;
+    }
+
+    // Untrusted copy function simulating heap buffer overflow
+    function untrustedCopy(source, size) {
+      let buffer = new Array(size).fill(0);
+      console.log("Initial untrusted buffer:", buffer);
+
+      // Intentionally write beyond the allocated buffersize to simulate overflow
+      for (let i = 0; i < size + 10; i++) {
+        // This simulates writing out of bounds in low-level languages
+        buffer[i] = source[i] || 0;
+      }
+
+      console.log("Buffer after simulated overflow:", buffer);
+      return buffer;
+    }
+
+    // Source array larger than safe buffersize
+    let sourceArray = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20];
+
+    // Set buffersize smaller than source array length
+    let bufferSize = 10;
+
+    console.log("---- Trusted Copy ----");
+    trustedCopy(sourceArray, bufferSize);
+
+    console.log("---- Untrusted Copy (Simulated Overflow) ----");
+    untrustedCopy(sourceArray, bufferSize);
+
+  </script>
+</body>
+</html>
