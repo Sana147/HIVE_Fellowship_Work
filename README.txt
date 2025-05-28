@@ -1,4 +1,4 @@
-# CVE-2020-16010 Educational Proof of Concept (Kotlin Version)
+# CVE-2020-16010 Educational Proof of Concept (HTML + Kotlin Version)
 
 This is a safe, educational PoC demonstrating how malformed images may impact rendering behavior in Android WebView. It simulates crash-prone behavior related to CVE-2020-16010.
 
